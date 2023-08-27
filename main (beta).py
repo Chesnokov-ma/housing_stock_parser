@@ -53,7 +53,7 @@ def get_data(all_pages_dict):
     building_type = 'Серия, тип постройки'
     floor_type = 'Тип перекрытий'
     load_bearing_wall_material = 'Материал несущих стен'
-    disrepair = 'Признан варийным'
+    disrepair = 'Признан аварийным'
 
     with open(f'data.csv', 'w') as file:
         file.close()
@@ -178,15 +178,10 @@ def get_data(all_pages_dict):
     return 0
 
 req = get_request("https://dom.mingkh.ru/primorskiy-kray/vladivostok/")
-
 r_src = req.text
-
 src = get_html(r_src)
-
 soup = BeautifulSoup(src, "lxml")
-
 all_pages_dict = get_all_pages(soup)
-
 get_data(all_pages_dict)
 
 end_time = time.time() - start_time
