@@ -32,7 +32,7 @@ def get_all_pages(soup):
     for num_page in range(1, all_pages + 1):
         num_page_str = str(num_page)
         url = 'https://dom.mingkh.ru/primorskiy-kray/vladivostok/?page=' + num_page_str
-        num_page_text = 'Страница №' + num_page_str
+        num_page_text = 'Page №' + num_page_str
         num_page_href = url
         all_pages_dictionary[num_page_text] = num_page_href
     return all_pages_dictionary
@@ -168,7 +168,7 @@ def get_data(all_pages_dict):
                 )
 
         page_count += 1
-        if (page_count == 3): break
+        if (page_count == 1): break
 
     with open(f"data.json", "a", encoding="cp1251") as file:
         json.dump(houses_info, file, indent=4, ensure_ascii=False)
@@ -191,4 +191,4 @@ get_data(all_pages_dict)
 
 end_time = time.time() - start_time
 end_time = round(end_time, 3)
-print(f'Время работы программы: {end_time} сек')
+print(f'Total running time of the program: {end_time} sec')
