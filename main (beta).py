@@ -31,9 +31,8 @@ def get_all_pages(soup):
     all_pages_dictionary = {}
     for num_page in range(1, all_pages + 1):
         num_page_str = str(num_page)
-        url = 'https://dom.mingkh.ru/primorskiy-kray/vladivostok/?page=' + num_page_str
+        num_page_href = 'https://dom.mingkh.ru/primorskiy-kray/vladivostok/?page=' + num_page_str
         num_page_text = 'Page №' + num_page_str
-        num_page_href = url
         all_pages_dictionary[num_page_text] = num_page_href
     return all_pages_dictionary
 
