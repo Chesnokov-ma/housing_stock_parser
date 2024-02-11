@@ -192,12 +192,17 @@ class Data_capture:
 # all_pages_dict = stock.get_all_pages(soup)
 # stock.get_data(all_pages_dict)
 
-csv_data = pd.read_csv('data.csv', delimiter = ';')
-housing_data = pd.DataFrame(csv_data)
-print(housing_data)
-print(housing_data.columns)
-housing_data = housing_data.sort_values(by = 'Год постройки', ascending = False)
-print(housing_data[['Адрес', 'Год постройки']])
+def read_data(file_name):
+    csv_data = pd.read_csv(file_name, delimiter=';')
+    housing_data = pd.DataFrame(csv_data)
+    # print(housing_data)
+    # print(housing_data.columns)
+    # housing_data = housing_data.sort_values(by = 'Год постройки', ascending = False)
+    # print(housing_data[['Адрес', 'Год постройки']])
+    return housing_data
+
+data_hsp = read_data('data.csv')
+print(data_hsp)
 
 end_time = time.time() - start_time
 end_time = round(end_time, 3)
