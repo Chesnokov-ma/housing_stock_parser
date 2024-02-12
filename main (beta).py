@@ -198,9 +198,8 @@ class Graphs:
     def __init__(self):
         pass
 
-    def histogram(self, data_hsp_array, discription):
+    def bar_chart_hsp(self, data_hsp_array, discription):
         data_hsp_array = data_hsp_array.tolist()
-        data_hsp_array.sort()
         data_array_counts = Counter(data_hsp_array)
         data_array_keys = list(data_array_counts.keys())
         data_array_values = list(data_array_counts.values())
@@ -216,6 +215,17 @@ class Graphs:
         plt.show()
         return 0
 
+    def pie_diagram(self, data_hsp_array):
+        data_hsp_array = data_hsp_array.tolist()
+        data_array_counts = Counter(data_hsp_array)
+        data_array_keys = list(data_array_counts.keys())
+        data_array_values = list(data_array_counts.values())
+
+        fig = plt.figure()
+        plt.pie(data_array_values, labels=data_array_keys)
+        plt.show()
+        return 0
+
 # stock = Data_capture()
 # req = stock.get_request("https://dom.mingkh.ru/primorskiy-kray/vladivostok/")
 # r_src = req.text
@@ -228,9 +238,11 @@ data_file = Read_stock()
 data_hsp = data_file.read_data('data.csv')
 
 data_graph = Graphs()
-data_graph.histogram(data_hsp['Год постройки'], 'Год постройки') #вызов метода столбчатой диаграммы по году постройки домов
-#data_graph.histogram(data_hsp['Количество этажей'], 'Количество этажей') #вызов метода столбчатой диаграммы по числу этажей домов
-#data_graph.histogram(data_hsp['Жилых помещений'], 'Количество жилых помещений') #вызов метода столбчатой диаграммы по числу жилых помещений
+#data_graph.bar_chart_hsp(data_hsp['Год постройки'], 'Год постройки') #вызов метода столбчатой диаграммы по году постройки домов
+#data_graph.bar_chart_hsp(data_hsp['Количество этажей'], 'Количество этажей') #вызов метода столбчатой диаграммы по числу этажей домов
+#data_graph.bar_chart_hsp(data_hsp['Жилых помещений'], 'Количество жилых помещений') #вызов метода столбчатой диаграммы по числу жилых
+
+#data_graph.pie_diagram(data_hsp['Тип перекрытий'])
 
 end_time = time.time() - start_time
 end_time = round(end_time, 3)
