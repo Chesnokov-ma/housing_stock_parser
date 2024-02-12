@@ -216,6 +216,42 @@ class Graphs:
         plt.show()
         return 0
 
+    def histogram_floors(self, dataframe_hsp):
+        data_hsp_array = dataframe_hsp['Количество этажей'].tolist()
+        data_hsp_array.sort()
+        data_array_counts = Counter(data_hsp_array)
+        data_array_keys = list(data_array_counts.keys())
+        data_array_values = list(data_array_counts.values())
+
+        print(data_hsp)
+        print(data_array_keys)
+        print(data_array_values)
+
+        plt.bar(data_array_keys, data_array_values)
+        plt.xlabel("No. of floors")
+        plt.ylabel("No. of houses")
+        plt.title("Distribution of the number of houses by number of floors")
+        plt.show()
+        return 0
+
+    def histogram_living_quarters(self, dataframe_hsp):
+        data_hsp_array = dataframe_hsp['Жилых помещений'].tolist()
+        data_hsp_array.sort()
+        data_array_counts = Counter(data_hsp_array)
+        data_array_keys = list(data_array_counts.keys())
+        data_array_values = list(data_array_counts.values())
+
+        print(data_hsp)
+        print(data_array_keys)
+        print(data_array_values)
+
+        plt.bar(data_array_keys, data_array_values)
+        plt.xlabel("No. of floors")
+        plt.ylabel("No. of houses")
+        plt.title("Distribution of the number of houses by number of living quarters")
+        plt.show()
+        return 0
+
 # stock = Data_capture()
 # req = stock.get_request("https://dom.mingkh.ru/primorskiy-kray/vladivostok/")
 # r_src = req.text
@@ -228,7 +264,9 @@ data_file = Read_stock()
 data_hsp = data_file.read_data('data.csv')
 
 data_graph = Graphs()
-data_graph.histogram_year_of_construction(data_hsp)
+#data_graph.histogram_year_of_construction(data_hsp) #вызов метода столбчатой диаграммы по году постройки домов
+#data_graph.histogram_floors(data_hsp) #вызов метода столбчатой диаграммы по числу этажей домов
+#data_graph.histogram_living_quarters(data_hsp) #вызов метода столбчатой диаграммы по числу жилых помещений
 
 end_time = time.time() - start_time
 end_time = round(end_time, 3)
