@@ -2,10 +2,12 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import csv
-import openpyxl
 import time
 import os
 import pandas as pd
+from collections import Counter
+import numpy
+import matplotlib.pyplot as plt
 start_time = time.time()
 
 class Data_capture:
@@ -174,7 +176,7 @@ class Data_capture:
                     )
 
             page_count += 1
-            if (page_count == 1): break
+            if (page_count == 2): break
 
         with open(f"data.json", "a", encoding="cp1251") as file:
             json.dump(houses_info, file, indent=4, ensure_ascii=False)
@@ -192,6 +194,28 @@ class Read_stock:
         housing_data = pd.DataFrame(csv_data)
         return housing_data
 
+class Graphs:
+    def __init__(self):
+        pass
+
+    def histogram_year_of_construction(self, dataframe_hsp):
+        data_hsp_array = dataframe_hsp['Год постройки'].tolist()
+        data_hsp_array.sort()
+        data_array_counts = Counter(data_hsp_array)
+        data_array_keys = list(data_array_counts.keys())
+        data_array_values = list(data_array_counts.values())
+
+        print(data_hsp)
+        print(data_array_keys)
+        print(data_array_values)
+
+        plt.bar(data_array_keys, data_array_values)
+        plt.xlabel("Year of counstruction")
+        plt.ylabel("No. of houses")
+        plt.title("Distribution of the number of houses by year of construction")
+        plt.show()
+        return 0
+
 # stock = Data_capture()
 # req = stock.get_request("https://dom.mingkh.ru/primorskiy-kray/vladivostok/")
 # r_src = req.text
@@ -202,7 +226,9 @@ class Read_stock:
 
 data_file = Read_stock()
 data_hsp = data_file.read_data('data.csv')
-print(data_hsp)
+
+data_graph = Graphs()
+data_graph.histogram_year_of_construction(data_hsp)
 
 end_time = time.time() - start_time
 end_time = round(end_time, 3)
