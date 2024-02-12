@@ -198,7 +198,7 @@ class Graphs:
     def __init__(self):
         pass
 
-    def histogram(self, data_hsp_array):
+    def histogram(self, data_hsp_array, discription):
         data_hsp_array = data_hsp_array.tolist()
         data_hsp_array.sort()
         data_array_counts = Counter(data_hsp_array)
@@ -210,9 +210,9 @@ class Graphs:
         print(data_array_values)
 
         plt.bar(data_array_keys, data_array_values)
-        plt.xlabel("???")
-        plt.ylabel("No. of houses")
-        plt.title("Distribution of the number of houses by ???")
+        plt.xlabel(discription)
+        plt.ylabel("Количество домов")
+        plt.title("Диаграмма распределения домов")
         plt.show()
         return 0
 
@@ -228,9 +228,9 @@ data_file = Read_stock()
 data_hsp = data_file.read_data('data.csv')
 
 data_graph = Graphs()
-#data_graph.histogram(data_hsp['Год постройки']) #вызов метода столбчатой диаграммы по году постройки домов
-data_graph.histogram(data_hsp['Количество этажей']) #вызов метода столбчатой диаграммы по числу этажей домов
-#data_graph.histogram(data_hsp['Жилых помещений']) #вызов метода столбчатой диаграммы по числу жилых помещений
+data_graph.histogram(data_hsp['Год постройки'], 'Год постройки') #вызов метода столбчатой диаграммы по году постройки домов
+#data_graph.histogram(data_hsp['Количество этажей'], 'Количество этажей') #вызов метода столбчатой диаграммы по числу этажей домов
+#data_graph.histogram(data_hsp['Жилых помещений'], 'Количество жилых помещений') #вызов метода столбчатой диаграммы по числу жилых помещений
 
 end_time = time.time() - start_time
 end_time = round(end_time, 3)
