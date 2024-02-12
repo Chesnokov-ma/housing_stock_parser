@@ -183,6 +183,14 @@ class Data_capture:
         os.remove('data_page.html')
         return 0
 
+class Read_stock:
+    def __init__(self):
+        pass
+
+    def read_data(self, file_name):
+        csv_data = pd.read_csv(file_name, delimiter=';')
+        housing_data = pd.DataFrame(csv_data)
+        return housing_data
 
 # stock = Data_capture()
 # req = stock.get_request("https://dom.mingkh.ru/primorskiy-kray/vladivostok/")
@@ -192,16 +200,8 @@ class Data_capture:
 # all_pages_dict = stock.get_all_pages(soup)
 # stock.get_data(all_pages_dict)
 
-def read_data(file_name):
-    csv_data = pd.read_csv(file_name, delimiter=';')
-    housing_data = pd.DataFrame(csv_data)
-    # print(housing_data)
-    # print(housing_data.columns)
-    # housing_data = housing_data.sort_values(by = 'Год постройки', ascending = False)
-    # print(housing_data[['Адрес', 'Год постройки']])
-    return housing_data
-
-data_hsp = read_data('data.csv')
+data_file = Read_stock()
+data_hsp = data_file.read_data('data.csv')
 print(data_hsp)
 
 end_time = time.time() - start_time
