@@ -198,15 +198,12 @@ class Graphs:
     def __init__(self):
         pass
 
-    def bar_chart_hsp(self, data_hsp_array, discription):
-        data_hsp_array = data_hsp_array.tolist()
-        data_array_counts = Counter(data_hsp_array)
+    def bar_chart_hsp(self, data_hsp_column, discription):
+        data_hsp_list = data_hsp_column.tolist()
+        data_array_counts = dict(Counter(data_hsp_list))
+        data_array_counts = dict(sorted(data_array_counts.items(), reverse=False))
         data_array_keys = list(data_array_counts.keys())
         data_array_values = list(data_array_counts.values())
-
-        print(data_hsp)
-        print(data_array_keys)
-        print(data_array_values)
 
         plt.bar(data_array_keys, data_array_values)
         plt.xlabel(discription)
@@ -215,14 +212,16 @@ class Graphs:
         plt.show()
         return 0
 
-    def pie_diagram(self, data_hsp_array):
-        data_hsp_array = data_hsp_array.tolist()
-        data_array_counts = Counter(data_hsp_array)
+    def pie_diagram(self, data_hsp_column):
+        data_hsp_list = data_hsp_column.tolist()
+        data_array_counts = dict(Counter(data_hsp_list))
+        data_array_counts = dict(sorted(data_array_counts.items(), key=lambda item: item[1], reverse=True))
         data_array_keys = list(data_array_counts.keys())
         data_array_values = list(data_array_counts.values())
 
         fig = plt.figure()
         plt.pie(data_array_values, labels=data_array_keys)
+        plt.title("???")
         plt.show()
         return 0
 
@@ -238,11 +237,12 @@ data_file = Read_stock()
 data_hsp = data_file.read_data('data.csv')
 
 data_graph = Graphs()
-#data_graph.bar_chart_hsp(data_hsp['Год постройки'], 'Год постройки') #вызов метода столбчатой диаграммы по году постройки домов
+
+data_graph.bar_chart_hsp(data_hsp['Год постройки'], 'Год постройки') #вызов метода столбчатой диаграммы по году постройки домов
 #data_graph.bar_chart_hsp(data_hsp['Количество этажей'], 'Количество этажей') #вызов метода столбчатой диаграммы по числу этажей домов
 #data_graph.bar_chart_hsp(data_hsp['Жилых помещений'], 'Количество жилых помещений') #вызов метода столбчатой диаграммы по числу жилых
 
-#data_graph.pie_diagram(data_hsp['Тип перекрытий'])
+#data_graph.pie_diagram(data_hsp['Тип перекрытий']) #вызов метода круговой диаграммы
 
 end_time = time.time() - start_time
 end_time = round(end_time, 3)
