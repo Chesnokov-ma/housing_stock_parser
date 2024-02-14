@@ -200,14 +200,11 @@ class Graphs:
 
     def bar_chart_hsp(self, data_hsp_column, discription):
         data_hsp_list = data_hsp_column.tolist()
-
         data_array_counts = dict(Counter(data_hsp_list))
         del data_array_counts['Нет данных']
 
-        print(data_array_counts)
         data_array_counts = {int(k):int(v) for k,v in data_array_counts.items()}
         data_array_counts = dict(sorted(data_array_counts.items(), reverse=False))
-        print(data_array_counts)
         data_array_counts = {str(k):int(v) for k, v in data_array_counts.items()}
 
         data_array_keys = list(data_array_counts.keys())
