@@ -200,7 +200,9 @@ class Graphs:
     def bar_chart_hsp(self, data_hsp_column, discription):
         data_hsp_list = data_hsp_column.tolist()
         data_array_counts = dict(Counter(data_hsp_list))
-        del data_array_counts['Нет данных']
+        
+        if 'Нет данных' in data_array_counts.keys():
+            del data_array_counts['Нет данных']
 
         data_array_counts = {int(k):int(v) for k,v in data_array_counts.items()}
         data_array_counts = dict(sorted(data_array_counts.items(), reverse=False))
@@ -248,8 +250,8 @@ data_hsp = data_file.read_data('data.csv')
 
 data_graph = Graphs()
 
-data_graph.bar_chart_hsp(data_hsp['Год постройки'], 'Год постройки') #вызов метода столбчатой диаграммы по году постройки домов
-#data_graph.bar_chart_hsp(data_hsp['Количество этажей'], 'Количество этажей') #вызов метода столбчатой диаграммы по числу этажей домов
+#data_graph.bar_chart_hsp(data_hsp['Год постройки'], 'Год постройки') #вызов метода столбчатой диаграммы по году постройки домов
+data_graph.bar_chart_hsp(data_hsp['Количество этажей'], 'Количество этажей') #вызов метода столбчатой диаграммы по числу этажей домов
 #data_graph.bar_chart_hsp(data_hsp['Жилых помещений'], 'Количество жилых помещений') #вызов метода столбчатой диаграммы по числу жилых
 
 #data_graph.pie_diagram(data_hsp['Тип перекрытий']) #вызов метода круговой диаграммы
