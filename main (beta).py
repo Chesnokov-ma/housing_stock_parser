@@ -8,7 +8,6 @@ import pandas as pd
 from collections import Counter
 import numpy
 import matplotlib.pyplot as plt
-start_time = time.time()
 
 class Data_capture:
 
@@ -176,7 +175,7 @@ class Data_capture:
                     )
 
             page_count += 1
-            if (page_count == 2): break
+            if (page_count == 4): break
 
         with open(f"data.json", "a", encoding="cp1251") as file:
             json.dump(houses_info, file, indent=4, ensure_ascii=False)
@@ -230,6 +229,8 @@ class Graphs:
         plt.show()
         return 0
 
+# start_time = time.time()
+#
 # stock = Data_capture()
 # req = stock.get_request("https://dom.mingkh.ru/primorskiy-kray/vladivostok/")
 # r_src = req.text
@@ -237,6 +238,10 @@ class Graphs:
 # soup = BeautifulSoup(src, "lxml")
 # all_pages_dict = stock.get_all_pages(soup)
 # stock.get_data(all_pages_dict)
+#
+# end_time = time.time() - start_time
+# end_time = round(end_time, 3)
+# print(f'Total running time of scraping: {end_time} sec')
 
 data_file = Read_stock()
 data_hsp = data_file.read_data('data.csv')
@@ -248,7 +253,3 @@ data_graph.bar_chart_hsp(data_hsp['Год постройки'], 'Год пост
 #data_graph.bar_chart_hsp(data_hsp['Жилых помещений'], 'Количество жилых помещений') #вызов метода столбчатой диаграммы по числу жилых
 
 #data_graph.pie_diagram(data_hsp['Тип перекрытий']) #вызов метода круговой диаграммы
-
-end_time = time.time() - start_time
-end_time = round(end_time, 3)
-print(f'Total running time of the program: {end_time} sec')
