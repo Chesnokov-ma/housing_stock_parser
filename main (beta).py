@@ -218,7 +218,7 @@ class Graphs:
         plt.show()
         return 0
 
-    def pie_diagram_hsp(self, data_hsp_column):
+    def pie_diagram_hsp(self, data_hsp_column, discription):
         data_hsp_list = data_hsp_column.tolist()
         data_array_counts = dict(Counter(data_hsp_list))
         data_array_counts = dict(sorted(data_array_counts.items(), key=lambda item: item[1], reverse=True))
@@ -227,7 +227,7 @@ class Graphs:
 
         fig = plt.figure()
         plt.pie(data_array_values, labels=data_array_keys)
-        plt.title("???")
+        plt.title(discription)
         plt.show()
         return 0
 
@@ -254,29 +254,35 @@ def summon_graphs(num_op_2):
 
     data_graph = Graphs()
 
-    if (num_op_2 == '1'):
-        data_graph.bar_chart_hsp(data_hsp['Год постройки'], 'Год постройки')  # вызов метода столбчатой диаграммы по году постройки домов
-    elif (num_op_2 == '2'):
-        data_graph.bar_chart_hsp(data_hsp['Количество этажей'], 'Количество этажей') #вызов метода столбчатой диаграммы по числу этажей
-    elif (num_op_2 == '3'):
-        data_graph.bar_chart_hsp(data_hsp['Жилых помещений'], 'Количество жилых помещений') #вызов метода столбчатой диаграммы по числу жилых
-
-    # data_graph.pie_diagram_hsp(data_hsp['Тип перекрытий']) #вызов метода круговой диаграммы
+    if (num_op_2 == '1'): data_graph.bar_chart_hsp(data_hsp['Год постройки'], 'Год постройки')  # вызов метода столбчатой диаграммы по году постройки домов
+    elif (num_op_2 == '2'): data_graph.bar_chart_hsp(data_hsp['Количество этажей'], 'Количество этажей') #вызов метода столбчатой диаграммы по числу этажей
+    elif (num_op_2 == '3'): data_graph.bar_chart_hsp(data_hsp['Жилых помещений'], 'Количество жилых помещений') #вызов метода столбчатой диаграммы по числу жилых
+    elif (num_op_2 == '4'): data_graph.pie_diagram_hsp(data_hsp['Тип перекрытий'], 'Тип перекрытий') #вызов метода круговой диаграммы
+    elif (num_op_2 == '5'): data_graph.pie_diagram_hsp(data_hsp['Материал несущих стен'], 'Материал несущих стен')  # вызов метода круговой диаграммы
+    elif (num_op_2 == '6'): data_graph.pie_diagram_hsp(data_hsp['Признан аварийным'], 'Признан аварийным')  # вызов метода круговой диаграммы
 
     return 0
 
-num_operation = input('1) Выполнить сбор данных\n2) Построить диаграмму\n0) Закрыть программу\nВыберите операцию и введите её номер: ')
+num_operation = 0
+while(num_operation != 9):
+    num_operation = input('1) Выполнить сбор данных\n2) Построить диаграмму\n9) Закрыть программу\nВыберите операцию и введите её номер: ')
 
-if (num_operation == '1'):
-    print(num_operation)
-    # summon_data_capture()
+    if (num_operation == '1'):
+        print(num_operation)
+        # summon_data_capture()
 
-elif (num_operation == '2'):
-    print(num_operation)
+    elif (num_operation == '2'):
+        print(num_operation)
 
-    num_operation_2 = input('1) "Год постройки"\n2) "Количество этажей"\n3) "Количество жилых помещений"\nВыберите критерий данных, по которому построить диаграмму и введите её номер: ')
-    summon_graphs(num_operation_2)
+        num_operation_2 = input('1) "Год постройки"\n'
+                                '2) "Количество этажей"\n'
+                                '3) "Количество жилых помещений"\n'
+                                '4) "Тип перекрытий"\n'
+                                '5) "Материал несущих стен"\n'
+                                '6) "Признан аварийным"\n'
+                                'Выберите критерий данных, по которому построить диаграмму и введите её номер: ')
+        summon_graphs(num_operation_2)
 
-elif (num_operation == '0'):
-    print(num_operation)
-    quit()
+    elif (num_operation == '9'):
+        print(num_operation)
+        quit()
