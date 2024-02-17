@@ -263,9 +263,9 @@ def summon_graphs(num_op_2):
 
     return 0
 
-num_operation = 0
-while(num_operation != 9):
-    num_operation = input('1) Выполнить сбор данных\n2) Построить диаграмму\n9) Закрыть программу\nВыберите операцию и введите её номер: ')
+num_operation = '1'
+while(num_operation != '0'):
+    num_operation = input('1) Выполнить сбор данных\n2) Построить диаграмму\n0) Закрыть программу\nВыберите операцию и введите её номер: ')
 
     if (num_operation == '1'):
         print(num_operation)
@@ -283,6 +283,6 @@ while(num_operation != 9):
                                 'Выберите критерий данных, по которому построить диаграмму и введите её номер: ')
         summon_graphs(num_operation_2)
 
-    elif (num_operation == '9'):
+    elif (num_operation == '0'):
         print(num_operation)
         quit()
