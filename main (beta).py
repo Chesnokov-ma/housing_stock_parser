@@ -200,7 +200,7 @@ class Graphs:
     def bar_chart_hsp(self, data_hsp_column, discription):
         data_hsp_list = data_hsp_column.tolist()
         data_array_counts = dict(Counter(data_hsp_list))
-        
+
         if 'Нет данных' in data_array_counts.keys():
             del data_array_counts['Нет данных']
 
@@ -218,7 +218,7 @@ class Graphs:
         plt.show()
         return 0
 
-    def pie_diagram(self, data_hsp_column):
+    def pie_diagram_hsp(self, data_hsp_column):
         data_hsp_list = data_hsp_column.tolist()
         data_array_counts = dict(Counter(data_hsp_list))
         data_array_counts = dict(sorted(data_array_counts.items(), key=lambda item: item[1], reverse=True))
@@ -231,27 +231,52 @@ class Graphs:
         plt.show()
         return 0
 
-# start_time = time.time()
-#
-# stock = Data_capture()
-# req = stock.get_request("https://dom.mingkh.ru/primorskiy-kray/vladivostok/")
-# r_src = req.text
-# src = stock.get_html(r_src)
-# soup = BeautifulSoup(src, "lxml")
-# all_pages_dict = stock.get_all_pages(soup)
-# stock.get_data(all_pages_dict)
-#
-# end_time = time.time() - start_time
-# end_time = round(end_time, 3)
-# print(f'Total running time of scraping: {end_time} sec')
+def summon_data_capture():
+    start_time = time.time()
 
-data_file = Read_stock()
-data_hsp = data_file.read_data('data.csv')
+    stock = Data_capture()
+    req = stock.get_request("https://dom.mingkh.ru/primorskiy-kray/vladivostok/")
+    r_src = req.text
+    src = stock.get_html(r_src)
+    soup = BeautifulSoup(src, "lxml")
+    all_pages_dict = stock.get_all_pages(soup)
+    stock.get_data(all_pages_dict)
 
-data_graph = Graphs()
+    end_time = time.time() - start_time
+    end_time = round(end_time, 3)
+    print(f'Total running time of scraping: {end_time} sec')
 
-#data_graph.bar_chart_hsp(data_hsp['Год постройки'], 'Год постройки') #вызов метода столбчатой диаграммы по году постройки домов
-data_graph.bar_chart_hsp(data_hsp['Количество этажей'], 'Количество этажей') #вызов метода столбчатой диаграммы по числу этажей домов
-#data_graph.bar_chart_hsp(data_hsp['Жилых помещений'], 'Количество жилых помещений') #вызов метода столбчатой диаграммы по числу жилых
+    return 0
 
-#data_graph.pie_diagram(data_hsp['Тип перекрытий']) #вызов метода круговой диаграммы
+def summon_graphs(num_op_2):
+    data_file = Read_stock()
+    data_hsp = data_file.read_data('data.csv')
+
+    data_graph = Graphs()
+
+    if (num_op_2 == '1'):
+        data_graph.bar_chart_hsp(data_hsp['Год постройки'], 'Год постройки')  # вызов метода столбчатой диаграммы по году постройки домов
+    elif (num_op_2 == '2'):
+        data_graph.bar_chart_hsp(data_hsp['Количество этажей'], 'Количество этажей') #вызов метода столбчатой диаграммы по числу этажей
+    elif (num_op_2 == '3'):
+        data_graph.bar_chart_hsp(data_hsp['Жилых помещений'], 'Количество жилых помещений') #вызов метода столбчатой диаграммы по числу жилых
+
+    # data_graph.pie_diagram_hsp(data_hsp['Тип перекрытий']) #вызов метода круговой диаграммы
+
+    return 0
+
+num_operation = input('1) Выполнить сбор данных\n2) Построить диаграмму\n0) Закрыть программу\nВыберите операцию и введите её номер: ')
+
+if (num_operation == '1'):
+    print(num_operation)
+    # summon_data_capture()
+
+elif (num_operation == '2'):
+    print(num_operation)
+
+    num_operation_2 = input('1) "Год постройки"\n2) "Количество этажей"\n3) "Количество жилых помещений"\nВыберите критерий данных, по которому построить диаграмму и введите её номер: ')
+    summon_graphs(num_operation_2)
+
+elif (num_operation == '0'):
+    print(num_operation)
+    quit()
