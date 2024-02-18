@@ -30,7 +30,7 @@ class Data_capture:
             src = file.read()
         return src
 
-    def get_all_pages(self, soup):
+    def get_all_pages(self, soup, s_url):
         pagination = soup.find(class_='pagination').find_all('li')
         page_a = pagination[-1].find('a')
         last_page = page_a.get('data-ci-pagination-page')
@@ -39,7 +39,7 @@ class Data_capture:
         all_pages_dictionary = {}
         for num_page in range(1, all_pages + 1):
             num_page_str = str(num_page)
-            num_page_href = 'https://dom.mingkh.ru/primorskiy-kray/vladivostok/?page=' + num_page_str
+            num_page_href = 'https://dom.mingkh.ru' + s_url + '?page=' + num_page_str
             num_page_text = 'Page №' + num_page_str
             all_pages_dictionary[num_page_text] = num_page_href
         return all_pages_dictionary
@@ -175,7 +175,7 @@ class Data_capture:
                     )
 
             page_count += 1
-            if (page_count == 4): break
+            if (page_count == 1): break
 
         with open(f"data.json", "a", encoding="cp1251") as file:
             json.dump(houses_info, file, indent=4, ensure_ascii=False)
@@ -231,15 +231,15 @@ class Graphs:
         plt.show()
         return 0
 
-def summon_data_capture():
+def summon_data_capture(city_url):
     start_time = time.time()
 
     stock = Data_capture()
-    req = stock.get_request("https://dom.mingkh.ru/primorskiy-kray/vladivostok/")
+    req = stock.get_request('https://dom.mingkh.ru' + city_url)
     r_src = req.text
     src = stock.get_html(r_src)
     soup = BeautifulSoup(src, "lxml")
-    all_pages_dict = stock.get_all_pages(soup)
+    all_pages_dict = stock.get_all_pages(soup, city_url)
     stock.get_data(all_pages_dict)
 
     end_time = time.time() - start_time
@@ -294,17 +294,20 @@ cities = {'Москва': '/moskva/moskva/',
           'Казань': '/tatarstan/kazan/',
           'Владивосток': '/primorskiy-kray/vladivostok/'}
 
+current_city_url = cities['Владивосток']
+
 num_operation_dict = {'0': 'Завершение работы',
                       '1': 'Сбор данных',
-                      '2': 'Построение диаграммы'}
+                      '2': 'Построение диаграммы',
+                      '3': 'Изменение города'}
 
 num_operation = '1'
 while(num_operation != '0'):
-    num_operation = input('1) Выполнить сбор данных\n2) Построить диаграмму\n0) Закрыть программу\n\nВыберите операцию и введите её номер: ')
+    num_operation = input('1) Выполнить сбор данных\n2) Построить диаграмму\n3) Сменить город\n0) Закрыть программу\n\nВыберите операцию и введите её номер: ')
 
     if (num_operation == '1'):
         print(f'{num_operation_dict[num_operation]}\n')
-        # summon_data_capture()
+        summon_data_capture(current_city_url)
 
     elif (num_operation == '2'):
         print(f'{num_operation_dict[num_operation]}\n')
@@ -321,6 +324,13 @@ while(num_operation != '0'):
                                     '0) "Назад"\n\n'
                                     'Выберите параметр данных, по которому нужно построить диаграмму, и введите его номер: ')
             summon_graphs(num_operation_2)
+
+    elif (num_operation == '3'):
+        print(f'{num_operation_dict[num_operation]}\n')
+        for k,v in cities.items():
+            if v == current_city_url:
+                print(f'Текущий город - {k}\n')
+
 
     elif (num_operation == '0'):
         print(f'{num_operation_dict[num_operation]}\n')
