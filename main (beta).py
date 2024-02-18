@@ -289,6 +289,11 @@ def summon_graphs(num_op_2):
     else: print('НЕВЕРНО ВВЕДЁН НОМЕР ОПЕРАЦИИ!\n')
     return 0
 
+cities = {'Москва': '/moskva/moskva/',
+          'Санкт-Петербург': '/sankt-peterburg/sankt-peterburg/',
+          'Казань': '/tatarstan/kazan/',
+          'Владивосток': '/primorskiy-kray/vladivostok/'}
+
 num_operation_dict = {'0': 'Завершение работы',
                       '1': 'Сбор данных',
                       '2': 'Построение диаграммы'}
