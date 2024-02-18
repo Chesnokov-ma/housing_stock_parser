@@ -280,7 +280,10 @@ def summon_graphs(num_op_2):
     elif (num_op_2 == '6'):
         print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
         data_graph.pie_diagram_hsp(data_hsp['Признан аварийным'], 'Признан аварийным')  # вызов метода круговой диаграммы
-
+    elif (num_op_2 == '0'):
+        print('\n')
+        pass
+    else: print('НЕВЕРНО ВВЕДЁН НОМЕР ОПЕРАЦИИ!\n')
     return 0
 
 num_operation_dict = {'0': 'Завершение работы',
@@ -298,14 +301,20 @@ while(num_operation != '0'):
     elif (num_operation == '2'):
         print(f'{num_operation_dict[num_operation]}\n')
 
-        num_operation_2 = input('1) "Год постройки"\n'
-                                '2) "Количество этажей"\n'
-                                '3) "Количество жилых помещений"\n'
-                                '4) "Тип перекрытий"\n'
-                                '5) "Материал несущих стен"\n'
-                                '6) "Признан аварийным"\n\n'
-                                'Выберите параметр данных, по которому нужно построить диаграмму, и введите его номер: ')
-        summon_graphs(num_operation_2)
+        num_operation_2 = '1'
+        while(num_operation_2 != '0'):
+            num_operation_2 = input('1) "Год постройки"\n'
+                                    '2) "Количество этажей"\n'
+                                    '3) "Количество жилых помещений"\n'
+                                    '4) "Тип перекрытий"\n'
+                                    '5) "Материал несущих стен"\n'
+                                    '6) "Признан аварийным"\n'
+                                    '0) "Назад"\n\n'
+                                    'Выберите параметр данных, по которому нужно построить диаграмму, и введите его номер: ')
+            summon_graphs(num_operation_2)
 
     elif (num_operation == '0'):
         print(f'{num_operation_dict[num_operation]}\n')
+
+    else:
+        print('НЕВЕРНО ВВЕДЁН НОМЕР ОПЕРАЦИИ!\n')
