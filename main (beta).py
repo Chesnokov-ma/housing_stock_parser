@@ -249,40 +249,63 @@ def summon_data_capture():
     return 0
 
 def summon_graphs(num_op_2):
+
+    num_operation_dict_2 = {'1': '"Год постройки"',
+                            '2': '"Количество этажей"',
+                            '3': '"Количество жилых помещений"',
+                            '4': '"Тип перекрытий"',
+                            '5': '"Материал несущих стен"',
+                            '6': '"Признан аварийным"'}
+
     data_file = Read_stock()
     data_hsp = data_file.read_data('data.csv')
 
     data_graph = Graphs()
 
-    if (num_op_2 == '1'): data_graph.bar_chart_hsp(data_hsp['Год постройки'], 'Год постройки')  # вызов метода столбчатой диаграммы по году постройки домов
-    elif (num_op_2 == '2'): data_graph.bar_chart_hsp(data_hsp['Количество этажей'], 'Количество этажей') #вызов метода столбчатой диаграммы по числу этажей
-    elif (num_op_2 == '3'): data_graph.bar_chart_hsp(data_hsp['Жилых помещений'], 'Количество жилых помещений') #вызов метода столбчатой диаграммы по числу жилых
-    elif (num_op_2 == '4'): data_graph.pie_diagram_hsp(data_hsp['Тип перекрытий'], 'Тип перекрытий') #вызов метода круговой диаграммы
-    elif (num_op_2 == '5'): data_graph.pie_diagram_hsp(data_hsp['Материал несущих стен'], 'Материал несущих стен')  # вызов метода круговой диаграммы
-    elif (num_op_2 == '6'): data_graph.pie_diagram_hsp(data_hsp['Признан аварийным'], 'Признан аварийным')  # вызов метода круговой диаграммы
+    if (num_op_2 == '1'):
+        print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
+        data_graph.bar_chart_hsp(data_hsp['Год постройки'], 'Год постройки')  # вызов метода столбчатой диаграммы по году постройки домов
+    elif (num_op_2 == '2'):
+        print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
+        data_graph.bar_chart_hsp(data_hsp['Количество этажей'], 'Количество этажей') #вызов метода столбчатой диаграммы по числу этажей
+    elif (num_op_2 == '3'):
+        print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
+        data_graph.bar_chart_hsp(data_hsp['Жилых помещений'], 'Количество жилых помещений') #вызов метода столбчатой диаграммы по числу жилых
+    elif (num_op_2 == '4'):
+        print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
+        data_graph.pie_diagram_hsp(data_hsp['Тип перекрытий'], 'Тип перекрытий') #вызов метода круговой диаграммы
+    elif (num_op_2 == '5'):
+        print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
+        data_graph.pie_diagram_hsp(data_hsp['Материал несущих стен'], 'Материал несущих стен')  # вызов метода круговой диаграммы
+    elif (num_op_2 == '6'):
+        print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
+        data_graph.pie_diagram_hsp(data_hsp['Признан аварийным'], 'Признан аварийным')  # вызов метода круговой диаграммы
 
     return 0
 
+num_operation_dict = {'0': 'Завершение работы',
+                      '1': 'Сбор данных',
+                      '2': 'Построение диаграммы'}
+
 num_operation = '1'
 while(num_operation != '0'):
-    num_operation = input('1) Выполнить сбор данных\n2) Построить диаграмму\n0) Закрыть программу\nВыберите операцию и введите её номер: ')
+    num_operation = input('1) Выполнить сбор данных\n2) Построить диаграмму\n0) Закрыть программу\n\nВыберите операцию и введите её номер: ')
 
     if (num_operation == '1'):
-        print(num_operation)
+        print(f'{num_operation_dict[num_operation]}\n')
         # summon_data_capture()
 
     elif (num_operation == '2'):
-        print(num_operation)
+        print(f'{num_operation_dict[num_operation]}\n')
 
         num_operation_2 = input('1) "Год постройки"\n'
                                 '2) "Количество этажей"\n'
                                 '3) "Количество жилых помещений"\n'
                                 '4) "Тип перекрытий"\n'
                                 '5) "Материал несущих стен"\n'
-                                '6) "Признан аварийным"\n'
-                                'Выберите критерий данных, по которому построить диаграмму и введите её номер: ')
+                                '6) "Признан аварийным"\n\n'
+                                'Выберите параметр данных, по которому нужно построить диаграмму, и введите его номер: ')
         summon_graphs(num_operation_2)
 
     elif (num_operation == '0'):
-        print(num_operation)
-        quit()
+        print(f'{num_operation_dict[num_operation]}\n')
