@@ -296,15 +296,22 @@ def replace_city(city_dict, curr_c_url):
             current_city_name = k
             print(f'Текущий город - {current_city_name}\n')
 
-    replace_city_name = input('г. Москва\n'
-                              'г. Санкт-Петербург\n'
-                              'г. Казань\n'
-                              'г. Владивосток\n\n'
-                              'Введите название города для сбора данных по его жилищному фонду: ')
-    current_city_url = city_dict[replace_city_name]
-    print(f'Город {current_city_name} сменён на город {replace_city_name}\n')
+    tmd = False
+    while (tmd == False):
+        replace_city_name = input('г. Москва\n'
+                                  'г. Санкт-Петербург\n'
+                                  'г. Казань\n'
+                                  'г. Владивосток\n\n'
+                                  'Введите название города для сбора данных по его жилищному фонду: ')
 
-    return 0
+        if replace_city_name in city_dict:
+            tmd = True
+            curr_c_url = city_dict[replace_city_name]
+            print(f'Город {current_city_name} сменён на город {replace_city_name}\n')
+        else:
+            print('ГОРОД НЕ НАЙДЕН!\n')
+
+    return curr_c_url
 
 cities = {'Москва': '/moskva/moskva/',
           'Санкт-Петербург': '/sankt-peterburg/sankt-peterburg/',
@@ -345,7 +352,7 @@ while(num_operation != '0'):
     elif (num_operation == '3'):
 
         print(f'{num_operation_dict[num_operation]}\n')
-        replace_city(cities, current_city_url)
+        current_city_url = replace_city(cities, current_city_url)
 
     elif (num_operation == '0'):
         print(f'{num_operation_dict[num_operation]}\n')
