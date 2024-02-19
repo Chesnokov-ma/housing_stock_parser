@@ -197,7 +197,7 @@ class Graphs:
     def __init__(self):
         pass
 
-    def bar_chart_hsp(self, data_hsp_column, discription):
+    def bar_chart_hsp(self, data_hsp_column, discription, name_c):
         data_hsp_list = data_hsp_column.tolist()
         data_array_counts = dict(Counter(data_hsp_list))
 
@@ -213,12 +213,12 @@ class Graphs:
 
         plt.bar(data_array_keys, data_array_values)
         plt.xlabel(discription)
-        plt.ylabel("Количество домов")
-        plt.title("Диаграмма распределения домов")
+        plt.ylabel('Количество домов')
+        plt.title('Диаграмма распределения домов (г. '+ name_c+')')
         plt.show()
         return 0
 
-    def pie_diagram_hsp(self, data_hsp_column, discription):
+    def pie_diagram_hsp(self, data_hsp_column, discription, name_c):
         data_hsp_list = data_hsp_column.tolist()
         data_array_counts = dict(Counter(data_hsp_list))
         data_array_counts = dict(sorted(data_array_counts.items(), key=lambda item: item[1], reverse=True))
@@ -227,95 +227,106 @@ class Graphs:
 
         fig = plt.figure()
         plt.pie(data_array_values, labels=data_array_keys)
-        plt.title(discription)
+        plt.title(discription + ' (г. '+ name_c + ')')
         plt.show()
         return 0
 
-def summon_data_capture(city_url):
-    start_time = time.time()
-
-    stock = Data_capture()
-    req = stock.get_request('https://dom.mingkh.ru' + city_url)
-    r_src = req.text
-    src = stock.get_html(r_src)
-    soup = BeautifulSoup(src, "lxml")
-    all_pages_dict = stock.get_all_pages(soup, city_url)
-    stock.get_data(all_pages_dict)
-
-    end_time = time.time() - start_time
-    end_time = round(end_time, 3)
-    print(f'\nTotal running time of scraping: {end_time} sec\n')
-
-    return 0
-
-def summon_graphs(num_op_2):
-
-    num_operation_dict_2 = {'1': '"Год постройки"',
-                            '2': '"Количество этажей"',
-                            '3': '"Тип дома"',
-                            '4': '"Количество жилых помещений"',
-                            '5': '"Тип перекрытий"',
-                            '6': '"Материал несущих стен"',
-                            '7': '"Признан аварийным"'}
-
-    data_file = Read_stock()
-    data_hsp = data_file.read_data('data.csv')
-
-    data_graph = Graphs()
-
-    if (num_op_2 == '1'):
-        print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
-        data_graph.bar_chart_hsp(data_hsp['Год постройки'], 'Год постройки')  # вызов метода столбчатой диаграммы по году постройки домов
-    elif (num_op_2 == '2'):
-        print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
-        data_graph.bar_chart_hsp(data_hsp['Количество этажей'], 'Количество этажей') #вызов метода столбчатой диаграммы по числу этажей
-    elif (num_op_2 == '3'):
-        print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
-        data_graph.pie_diagram_hsp(data_hsp['Тип дома'], 'Тип дома')  # вызов метода круговой диаграммы
-    elif (num_op_2 == '4'):
-        print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
-        data_graph.bar_chart_hsp(data_hsp['Жилых помещений'], 'Количество жилых помещений') #вызов метода столбчатой диаграммы по числу жилых
-    elif (num_op_2 == '5'):
-        print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
-        data_graph.pie_diagram_hsp(data_hsp['Тип перекрытий'], 'Тип перекрытий') #вызов метода круговой диаграммы
-    elif (num_op_2 == '6'):
-        print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
-        data_graph.pie_diagram_hsp(data_hsp['Материал несущих стен'], 'Материал несущих стен')  # вызов метода круговой диаграммы
-    elif (num_op_2 == '7'):
-        print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
-        data_graph.pie_diagram_hsp(data_hsp['Признан аварийным'], 'Признан аварийным')  # вызов метода круговой диаграммы
-    elif (num_op_2 == '0'):
-        print('\n')
+class Summon_operations:
+    def __init__(self):
         pass
-    else: print('НЕВЕРНО ВВЕДЁН НОМЕР ОПЕРАЦИИ!\n')
-    return 0
+    def data_capture_op(self, city_url):
+        start_time = time.time()
 
-def replace_city(city_dict, curr_c_url):
-    current_city_name = dict_key_read(city_dict, curr_c_url)
-    print(f'Текущий город - {current_city_name}\n')
+        stock = Data_capture()
+        req = stock.get_request('https://dom.mingkh.ru' + city_url)
+        r_src = req.text
+        src = stock.get_html(r_src)
+        soup = BeautifulSoup(src, "lxml")
+        all_pages_dict = stock.get_all_pages(soup, city_url)
+        stock.get_data(all_pages_dict)
 
-    tmd = False
-    while (tmd == False):
-        replace_city_name = input('г. Москва\n'
-                                  'г. Санкт-Петербург\n'
-                                  'г. Казань\n'
-                                  'г. Владивосток\n\n'
-                                  'Введите название города для сбора данных по его жилищному фонду: ')
+        end_time = time.time() - start_time
+        end_time = round(end_time, 3)
+        print(f'\nTotal running time of scraping: {end_time} sec\n')
 
-        if replace_city_name in city_dict:
-            tmd = True
-            curr_c_url = city_dict[replace_city_name]
-            print(f'Город {current_city_name} сменён на город {replace_city_name}\n')
+        return 0
+    def graphs_op(self, num_op_2, c_name):
+
+        num_operation_dict_2 = {'1': '"Год постройки"',
+                                '2': '"Количество этажей"',
+                                '3': '"Тип дома"',
+                                '4': '"Количество жилых помещений"',
+                                '5': '"Тип перекрытий"',
+                                '6': '"Материал несущих стен"',
+                                '7': '"Признан аварийным"'}
+
+        data_file = Read_stock()
+        data_hsp = data_file.read_data('data.csv')
+
+        data_graph = Graphs()
+
+        if (num_op_2 == '1'):
+            print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
+            data_graph.bar_chart_hsp(data_hsp['Год постройки'], 'Год постройки',
+                                     c_name)  # вызов метода столбчатой диаграммы по году постройки домов
+        elif (num_op_2 == '2'):
+            print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
+            data_graph.bar_chart_hsp(data_hsp['Количество этажей'], 'Количество этажей',
+                                     c_name)  # вызов метода столбчатой диаграммы по числу этажей
+        elif (num_op_2 == '3'):
+            print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
+            data_graph.pie_diagram_hsp(data_hsp['Тип дома'], 'Тип дома', c_name)  # вызов метода круговой диаграммы
+        elif (num_op_2 == '4'):
+            print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
+            data_graph.bar_chart_hsp(data_hsp['Жилых помещений'], 'Количество жилых помещений',
+                                     c_name)  # вызов метода столбчатой диаграммы по числу жилых
+        elif (num_op_2 == '5'):
+            print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
+            data_graph.pie_diagram_hsp(data_hsp['Тип перекрытий'], 'Тип перекрытий',
+                                       c_name)  # вызов метода круговой диаграммы
+        elif (num_op_2 == '6'):
+            print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
+            data_graph.pie_diagram_hsp(data_hsp['Материал несущих стен'], 'Материал несущих стен',
+                                       c_name)  # вызов метода круговой диаграммы
+        elif (num_op_2 == '7'):
+            print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
+            data_graph.pie_diagram_hsp(data_hsp['Признан аварийным'], 'Признан аварийным',
+                                       c_name)  # вызов метода круговой диаграммы
+        elif (num_op_2 == '0'):
+            print('\n')
+            pass
         else:
-            print('ГОРОД НЕ НАЙДЕН!\n')
+            print('НЕВЕРНО ВВЕДЁН НОМЕР ОПЕРАЦИИ!\n')
+        return 0
+    def replace_city_op(self, city_dict, curr_c_url):
+        current_city_name = dict_key_read(city_dict, curr_c_url)
+        print(f'Текущий город - {current_city_name}\n')
 
-    return curr_c_url
+        tmd = False
+        while (tmd == False):
+            replace_city_name = input('г. Москва\n'
+                                      'г. Санкт-Петербург\n'
+                                      'г. Казань\n'
+                                      'г. Владивосток\n\n'
+                                      'Введите название города для сбора данных по его жилищному фонду: ')
+
+            if replace_city_name in city_dict:
+                tmd = True
+                curr_c_url = city_dict[replace_city_name]
+                print(f'Город {current_city_name} сменён на город {replace_city_name}\n')
+            else:
+                print('ГОРОД НЕ НАЙДЕН!\n')
+
+        return curr_c_url
 
 def dict_key_read(cd, ccu):
     for k, v in cd.items():
         if v == ccu:
             dict_key = k
     return dict_key
+
+
+summon = Summon_operations()
 
 cities = {'Москва': '/moskva/moskva/',
           'Санкт-Петербург': '/sankt-peterburg/sankt-peterburg/',
@@ -331,11 +342,15 @@ num_operation_dict = {'0': 'Завершение работы',
 
 num_operation = '1'
 while(num_operation != '0'):
-    num_operation = input('1) Выполнить сбор данных\n2) Построить диаграмму\n3) Сменить город\n0) Закрыть программу\n\nВыберите операцию и введите её номер: ')
+    num_operation = input('1) Выполнить сбор данных\n'
+                          '2) Построить диаграмму\n'
+                          '3) Сменить город\n'
+                          '0) Закрыть программу\n\n'
+                          'Выберите операцию и введите её номер: ')
 
     if (num_operation == '1'):
         print(f'{num_operation_dict[num_operation]}\n')
-        summon_data_capture(current_city_url)
+        summon.data_capture_op(current_city_url)
 
     elif (num_operation == '2'):
         print(f'{num_operation_dict[num_operation]}\n')
@@ -351,12 +366,14 @@ while(num_operation != '0'):
                                     '7) "Признан аварийным"\n'
                                     '0) "Назад"\n\n'
                                     'Выберите параметр данных, по которому нужно построить диаграмму, и введите его номер: ')
-            summon_graphs(num_operation_2)
+            city_name = dict_key_read(cities, current_city_url)
+            print(city_name)
+            summon.graphs_op(num_operation_2, city_name)
 
     elif (num_operation == '3'):
 
         print(f'{num_operation_dict[num_operation]}\n')
-        current_city_url = replace_city(cities, current_city_url)
+        current_city_url = summon.replace_city_op(cities, current_city_url)
 
     elif (num_operation == '0'):
         print(f'{num_operation_dict[num_operation]}\n')
