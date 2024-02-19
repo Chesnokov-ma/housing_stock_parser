@@ -175,7 +175,7 @@ class Data_capture:
                     )
 
             page_count += 1
-            if (page_count == 1): break
+            if (page_count == 2): break
 
         with open(f"data.json", "a", encoding="cp1251") as file:
             json.dump(houses_info, file, indent=4, ensure_ascii=False)
@@ -244,7 +244,7 @@ def summon_data_capture(city_url):
 
     end_time = time.time() - start_time
     end_time = round(end_time, 3)
-    print(f'Total running time of scraping: {end_time} sec')
+    print(f'\nTotal running time of scraping: {end_time} sec\n')
 
     return 0
 
@@ -329,7 +329,16 @@ while(num_operation != '0'):
         print(f'{num_operation_dict[num_operation]}\n')
         for k,v in cities.items():
             if v == current_city_url:
-                print(f'Текущий город - {k}\n')
+                current_city_name = k
+                print(f'Текущий город - {current_city_name}\n')
+
+        replace_city_name = input('1) г. Москва\n'
+                             '2) г. Санкт-Петербург\n'
+                             '3) г. Казань\n'
+                             '4) г. Владивосток\n\n'
+                             'Введите название города для сбора данных по его жилищному фонду: ')
+        current_city_url = cities[replace_city_name]
+        print(f'Город {current_city_name} сменён на город {replace_city_name}\n')
 
 
     elif (num_operation == '0'):
