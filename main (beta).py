@@ -291,10 +291,8 @@ def summon_graphs(num_op_2):
     return 0
 
 def replace_city(city_dict, curr_c_url):
-    for k, v in city_dict.items():
-        if v == curr_c_url:
-            current_city_name = k
-            print(f'Текущий город - {current_city_name}\n')
+    current_city_name = dict_key_read(city_dict, curr_c_url)
+    print(f'Текущий город - {current_city_name}\n')
 
     tmd = False
     while (tmd == False):
@@ -312,6 +310,12 @@ def replace_city(city_dict, curr_c_url):
             print('ГОРОД НЕ НАЙДЕН!\n')
 
     return curr_c_url
+
+def dict_key_read(cd, ccu):
+    for k, v in cd.items():
+        if v == ccu:
+            dict_key = k
+    return dict_key
 
 cities = {'Москва': '/moskva/moskva/',
           'Санкт-Петербург': '/sankt-peterburg/sankt-peterburg/',
