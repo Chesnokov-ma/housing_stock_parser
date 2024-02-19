@@ -290,6 +290,22 @@ def summon_graphs(num_op_2):
     else: print('НЕВЕРНО ВВЕДЁН НОМЕР ОПЕРАЦИИ!\n')
     return 0
 
+def replace_city(city_dict, curr_c_url):
+    for k, v in city_dict.items():
+        if v == curr_c_url:
+            current_city_name = k
+            print(f'Текущий город - {current_city_name}\n')
+
+    replace_city_name = input('г. Москва\n'
+                              'г. Санкт-Петербург\n'
+                              'г. Казань\n'
+                              'г. Владивосток\n\n'
+                              'Введите название города для сбора данных по его жилищному фонду: ')
+    current_city_url = city_dict[replace_city_name]
+    print(f'Город {current_city_name} сменён на город {replace_city_name}\n')
+
+    return 0
+
 cities = {'Москва': '/moskva/moskva/',
           'Санкт-Петербург': '/sankt-peterburg/sankt-peterburg/',
           'Казань': '/tatarstan/kazan/',
@@ -327,23 +343,12 @@ while(num_operation != '0'):
             summon_graphs(num_operation_2)
 
     elif (num_operation == '3'):
+
         print(f'{num_operation_dict[num_operation]}\n')
-        for k,v in cities.items():
-            if v == current_city_url:
-                current_city_name = k
-                print(f'Текущий город - {current_city_name}\n')
-
-        replace_city_name = input('1) г. Москва\n'
-                             '2) г. Санкт-Петербург\n'
-                             '3) г. Казань\n'
-                             '4) г. Владивосток\n\n'
-                             'Введите название города для сбора данных по его жилищному фонду: ')
-        current_city_url = cities[replace_city_name]
-        print(f'Город {current_city_name} сменён на город {replace_city_name}\n')
-
+        replace_city(cities, current_city_url)
 
     elif (num_operation == '0'):
         print(f'{num_operation_dict[num_operation]}\n')
 
     else:
-        print('НЕВЕРНО ВВЕДЁН НОМЕР ОПЕРАЦИИ!\n')
+        print('НЕВЕРНО ВЫБРАНА ОПЕРАЦИЯ!\n')
