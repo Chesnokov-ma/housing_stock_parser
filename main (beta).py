@@ -204,18 +204,16 @@ class Graphs:
         if 'Нет данных' in data_array_counts.keys():
             del data_array_counts['Нет данных']
 
-        data_array_counts = {int(k):int(v) for k,v in data_array_counts.items()}
-        data_array_counts = dict(sorted(data_array_counts.items(), reverse=False))
-        data_array_counts = {str(k):int(v) for k, v in data_array_counts.items()}
+        df = pd.DataFrame(data_array_counts.items(), columns = ['key', 'val'])
+        df = df.sort_values(by = 'val', ascending = True)
 
-        data_array_keys = list(data_array_counts.keys())
-        data_array_values = list(data_array_counts.values())
-
-        plt.bar(data_array_keys, data_array_values)
-        plt.xlabel(discription)
-        plt.ylabel('Количество домов')
-        plt.title('Диаграмма распределения домов (г. '+ name_c+')')
+        fig, ax = plt.subplots(figsize = (8,8))
+        bars = plt.barh(df['key'], df['val'], color = '#4f65ad')
+        ax.bar_label(bars, color = 'black', fontsize = 10, label_type = 'edge', fontweight = 'bold')
+        ax.set_title('Диаграмма распределения домов (г. '+ name_c+')')
+        ax.set_ylabel(discription)
         plt.show()
+
         return 0
 
     def pie_diagram_hsp(self, data_hsp_column, discription, name_c):
@@ -263,6 +261,7 @@ class Summon_operations:
         data_file = Read_stock()
         data_hsp = data_file.read_data('data.csv')
 
+        data_hsp = data_hsp.astype(str)
         data_graph = Graphs()
 
         if (num_op_2 == '1'):
