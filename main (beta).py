@@ -8,6 +8,7 @@ import pandas as pd
 from collections import Counter
 import numpy
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 class Data_capture:
 
@@ -219,13 +220,16 @@ class Graphs:
     def pie_diagram_hsp(self, data_hsp_column, discription, name_c):
         data_hsp_list = data_hsp_column.tolist()
         data_array_counts = dict(Counter(data_hsp_list))
-        data_array_counts = dict(sorted(data_array_counts.items(), key=lambda item: item[1], reverse=True))
-        data_array_keys = list(data_array_counts.keys())
-        data_array_values = list(data_array_counts.values())
 
-        fig = plt.figure()
-        plt.pie(data_array_values, labels=data_array_keys)
+        df = pd.DataFrame(data_array_counts.items(), columns=['key', 'val'])
+        df = df.sort_values(by='val', ascending=True)
+
+        sns.set(font_scale = 1)
+        plt.figure(figsize=(8, 8))
+
+        plt.pie(df['val'], labels=df['key'], autopct='%.1f%%', colors = sns.color_palette('Set2'), startangle=90)
         plt.title(discription + ' (г. '+ name_c + ')')
+        plt.legend(labels=df['key'], loc = 'right')
         plt.show()
         return 0
 
