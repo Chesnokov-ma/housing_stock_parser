@@ -4,6 +4,7 @@ import json
 import csv
 import time
 import os
+import os.path
 import pandas as pd
 from collections import Counter
 import numpy
@@ -23,11 +24,11 @@ class Data_capture:
         req = requests.get(url, headers=headers)
         return req
 
-    def get_html(self, r_src):
-        with open("data.html", "w", encoding='utf-8') as file:
+    def get_html(self, r_src, u_n):
+        with open('data' + u_n + '.html', "w", encoding='utf-8') as file:
             file.write(r_src)
 
-        with open("data.html", encoding='utf-8') as file:
+        with open('data' + u_n + '.html', encoding='utf-8') as file:
             src = file.read()
         return src
 
@@ -45,11 +46,11 @@ class Data_capture:
             all_pages_dictionary[num_page_text] = num_page_href
         return all_pages_dictionary
 
-    def get_data(self, all_pages_dict, web_pages):
-        with open('all_pages.json', 'w') as file:
+    def get_data(self, all_pages_dict, web_pages, u_n):
+        with open('all_pages' + u_n + '.json', 'w') as file:
             json.dump(all_pages_dict, file, indent=4, ensure_ascii=False)
 
-        with open('all_pages.json') as file:
+        with open('all_pages' + u_n + '.json') as file:
             all_pages = json.load(file)
 
         # Сбор заголовков таблицы
@@ -63,12 +64,12 @@ class Data_capture:
         load_bearing_wall_material = 'Материал несущих стен'
         disrepair = 'Признан аварийным'
 
-        with open(f'data.csv', 'w') as file:
+        with open('data'+ u_n + '.csv', 'w') as file:
             file.close()
-        with open(f'data.json', 'w') as file:
+        with open('data' + u_n + '.json', 'w') as file:
             file.close()
 
-        with open(f"data.csv", "a", encoding="utf-8-sig", newline='') as file:
+        with open('data' + u_n + '.csv', "a", encoding="utf-8-sig", newline='') as file:
             writer = csv.writer(file, delimiter=";")
             writer.writerow(
                 [address, year_of_construction, number_of_floors, house_type, living_quarters, building_type, floor_type,
@@ -80,10 +81,10 @@ class Data_capture:
             print(num_page)
             req = self.get_request(page_href)
             src = req.text
-            with open('data_page.html', "w", encoding='utf-8') as file:
+            with open('data_page' + u_n + '.html', "w", encoding='utf-8') as file:
                 file.write(src)
 
-            with open('data_page.html', encoding='utf-8') as file:
+            with open('data_page' + u_n + '.html', encoding='utf-8') as file:
                 src = file.read()
 
             soup = BeautifulSoup(src, "lxml")
@@ -168,7 +169,7 @@ class Data_capture:
                     }
                 )
                 print(address)
-                with open(f"data.csv", "a", encoding="utf-8-sig", newline='') as file:
+                with open('data' + u_n + '.csv', "a", encoding="utf-8-sig", newline='') as file:
                     writer = csv.writer(file, delimiter=";")
                     writer.writerow(
                         [address, year_of_construction, number_of_floors, house_type, living_quarters, building_type,
@@ -178,11 +179,11 @@ class Data_capture:
             page_count += 1
             if (page_count == web_pages): break
 
-        with open(f"data.json", "a", encoding="cp1251") as file:
+        with open('data' + u_n + '.json', "a", encoding="cp1251") as file:
             json.dump(houses_info, file, indent=4, ensure_ascii=False)
 
-        os.remove('data.html')
-        os.remove('data_page.html')
+        os.remove('data' + u_n + '.html')
+        os.remove('data_page' + u_n + '.html')
         return 0
 
 class Read_stock:
@@ -190,9 +191,14 @@ class Read_stock:
         pass
 
     def read_data(self, file_name):
-        csv_data = pd.read_csv(file_name, delimiter=';')
-        housing_data = pd.DataFrame(csv_data)
-        return housing_data
+
+        if (os.path.exists(file_name) == True):
+            csv_data = pd.read_csv(file_name, delimiter=';')
+            housing_data = pd.DataFrame(csv_data)
+            print('Файл есть!')
+            return housing_data
+        else:
+            print('Файла нет!')
 
 class Graphs:
     def __init__(self):
@@ -236,23 +242,23 @@ class Graphs:
 class Summon_operations:
     def __init__(self):
         pass
-    def data_capture_op(self, city_url):
+    def data_capture_op(self, city_url, u_name):
         start_time = time.time()
 
         stock = Data_capture()
         req = stock.get_request('https://dom.mingkh.ru' + city_url)
         r_src = req.text
-        src = stock.get_html(r_src)
+        src = stock.get_html(r_src, u_name)
         soup = BeautifulSoup(src, "lxml")
         all_pages_dict = stock.get_all_pages(soup, city_url)
-        stock.get_data(all_pages_dict, 4)
+        stock.get_data(all_pages_dict, 1, u_name)
 
         end_time = time.time() - start_time
         end_time = round(end_time, 3)
         print(f'\nTotal running time of scraping: {end_time} sec\n')
 
         return 0
-    def graphs_op(self, num_op_2, c_name):
+    def graphs_op(self, num_op_2, c_name, data_hsp):
 
         num_operation_dict_2 = {'1': '"Год постройки"',
                                 '2': '"Количество этажей"',
@@ -261,9 +267,6 @@ class Summon_operations:
                                 '5': '"Тип перекрытий"',
                                 '6': '"Материал несущих стен"',
                                 '7': '"Признан аварийным"'}
-
-        data_file = Read_stock()
-        data_hsp = data_file.read_data('data.csv')
 
         data_hsp = data_hsp.astype(str)
         data_graph = Graphs()
@@ -348,6 +351,8 @@ num_operation_dict = {'0': 'Завершение работы',
 
 num_operation = '1'
 while(num_operation != '0'):
+    url_data_file_name = current_city_url.replace('/', '_')
+
     num_operation = input('1) Выполнить сбор данных\n'
                           '2) Построить диаграмму\n'
                           '3) Сменить город\n'
@@ -356,25 +361,31 @@ while(num_operation != '0'):
 
     if (num_operation == '1'):
         print(f'{num_operation_dict[num_operation]}\n')
-        summon.data_capture_op(current_city_url)
+        summon.data_capture_op(current_city_url, url_data_file_name)
 
     elif (num_operation == '2'):
         print(f'{num_operation_dict[num_operation]}\n')
 
-        num_operation_2 = '1'
-        while(num_operation_2 != '0'):
-            num_operation_2 = input('1) "Год постройки"\n'
-                                    '2) "Количество этажей"\n'
-                                    '3) "Тип дома"\n'
-                                    '4) "Количество жилых помещений"\n'
-                                    '5) "Тип перекрытий"\n'
-                                    '6) "Материал несущих стен"\n'
-                                    '7) "Признан аварийным"\n'
-                                    '0) Назад\n\n'
-                                    'Выберите параметр данных, по которому нужно построить диаграмму, и введите его номер: ')
-            city_name = dict_key_read(cities, current_city_url)
-            print(city_name)
-            summon.graphs_op(num_operation_2, city_name)
+        data_file = Read_stock()
+        data_hsp = data_file.read_data('data' + url_data_file_name + '.csv')
+
+        if(data_hsp is None):
+            print('Ошибка! Файл data' + url_data_file_name + '.csv' + ' не найден!')
+        else:
+            num_operation_2 = '1'
+            while(num_operation_2 != '0'):
+                num_operation_2 = input('1) "Год постройки"\n'
+                                        '2) "Количество этажей"\n'
+                                        '3) "Тип дома"\n'
+                                        '4) "Количество жилых помещений"\n'
+                                        '5) "Тип перекрытий"\n'
+                                        '6) "Материал несущих стен"\n'
+                                        '7) "Признан аварийным"\n'
+                                        '0) Назад\n\n'
+                                        'Выберите параметр данных, по которому нужно построить диаграмму, и введите его номер: ')
+                city_name = dict_key_read(cities, current_city_url)
+                print(city_name)
+                summon.graphs_op(num_operation_2, city_name, data_hsp)
 
     elif (num_operation == '3'):
 
