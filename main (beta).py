@@ -45,7 +45,7 @@ class Data_capture:
             all_pages_dictionary[num_page_text] = num_page_href
         return all_pages_dictionary
 
-    def get_data(self, all_pages_dict):
+    def get_data(self, all_pages_dict, web_pages):
         with open('all_pages.json', 'w') as file:
             json.dump(all_pages_dict, file, indent=4, ensure_ascii=False)
 
@@ -176,7 +176,7 @@ class Data_capture:
                     )
 
             page_count += 1
-            if (page_count == 2): break
+            if (page_count == web_pages): break
 
         with open(f"data.json", "a", encoding="cp1251") as file:
             json.dump(houses_info, file, indent=4, ensure_ascii=False)
@@ -229,8 +229,8 @@ class Graphs:
 
         plt.pie(df['val'], labels=df['key'], autopct='%.1f%%', colors = sns.color_palette('Set2'), startangle=90)
         plt.title(discription + ' (г. '+ name_c + ')')
-        plt.legend(labels=df['key'], loc = 'right')
         plt.show()
+
         return 0
 
 class Summon_operations:
@@ -245,7 +245,7 @@ class Summon_operations:
         src = stock.get_html(r_src)
         soup = BeautifulSoup(src, "lxml")
         all_pages_dict = stock.get_all_pages(soup, city_url)
-        stock.get_data(all_pages_dict)
+        stock.get_data(all_pages_dict, 4)
 
         end_time = time.time() - start_time
         end_time = round(end_time, 3)
@@ -310,10 +310,13 @@ class Summon_operations:
             replace_city_name = input('г. Москва\n'
                                       'г. Санкт-Петербург\n'
                                       'г. Казань\n'
-                                      'г. Владивосток\n\n'
+                                      'г. Владивосток\n'
+                                      '0) Назад\n\n'
                                       'Введите название города для сбора данных по его жилищному фонду: ')
 
-            if replace_city_name in city_dict:
+            if replace_city_name == '0':
+                tmd = True
+            elif replace_city_name in city_dict:
                 tmd = True
                 curr_c_url = city_dict[replace_city_name]
                 print(f'Город {current_city_name} сменён на город {replace_city_name}\n')
@@ -367,7 +370,7 @@ while(num_operation != '0'):
                                     '5) "Тип перекрытий"\n'
                                     '6) "Материал несущих стен"\n'
                                     '7) "Признан аварийным"\n'
-                                    '0) "Назад"\n\n'
+                                    '0) Назад\n\n'
                                     'Выберите параметр данных, по которому нужно построить диаграмму, и введите его номер: ')
             city_name = dict_key_read(cities, current_city_url)
             print(city_name)
