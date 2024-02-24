@@ -64,7 +64,7 @@ class Data_capture:
         load_bearing_wall_material = 'Материал несущих стен'
         disrepair = 'Признан аварийным'
 
-        with open('data'+ u_n + '.csv', 'w') as file:
+        with open('data' + u_n + '.csv', 'w') as file:
             file.close()
         with open('data' + u_n + '.json', 'w') as file:
             file.close()
@@ -195,10 +195,9 @@ class Read_stock:
         if (os.path.exists(file_name) == True):
             csv_data = pd.read_csv(file_name, delimiter=';')
             housing_data = pd.DataFrame(csv_data)
-            print('Файл есть!')
             return housing_data
         else:
-            print('Файла нет!')
+            pass
 
 class Graphs:
     def __init__(self):
@@ -258,6 +257,7 @@ class Summon_operations:
         print(f'\nTotal running time of scraping: {end_time} sec\n')
 
         return 0
+
     def graphs_op(self, num_op_2, c_name, data_hsp):
 
         num_operation_dict_2 = {'1': '"Год постройки"',
@@ -304,18 +304,22 @@ class Summon_operations:
         else:
             print('НЕВЕРНО ВВЕДЁН НОМЕР ОПЕРАЦИИ!\n')
         return 0
+
     def replace_city_op(self, city_dict, curr_c_url):
         current_city_name = dict_key_read(city_dict, curr_c_url)
         print(f'Текущий город - {current_city_name}\n')
 
         tmd = False
         while (tmd == False):
-            replace_city_name = input('г. Москва\n'
-                                      'г. Санкт-Петербург\n'
-                                      'г. Казань\n'
-                                      'г. Владивосток\n'
-                                      '0) Назад\n\n'
-                                      'Введите название города для сбора данных по его жилищному фонду: ')
+            for k, v, in city_dict.items(): print(f'г. {k}')
+            print('0) Назад\n')
+            replace_city_name = input('Введите название города для сбора данных по его жилищному фонду: ')
+            # replace_city_name = input('г. Москва\n'
+            #                           'г. Санкт-Петербург\n'
+            #                           'г. Казань\n'
+            #                           'г. Владивосток\n'
+            #                           '0) Назад\n\n'
+            #                           'Введите название города для сбора данных по его жилищному фонду: ')
 
             if replace_city_name == '0':
                 tmd = True
@@ -334,13 +338,18 @@ def dict_key_read(cd, ccu):
             dict_key = k
     return dict_key
 
+def city_dict_open(file_name):
+    if (os.path.exists(file_name) == True):
+        with open(file_name) as f:
+            c_dict = json.load(f)
+        return c_dict
+    else:
+        input('Ошибка! Файл city_dict.json не найден!\nНажмите Enter чтобы выйти. ')
+        quit()
 
 summon = Summon_operations()
 
-cities = {'Москва': '/moskva/moskva/',
-          'Санкт-Петербург': '/sankt-peterburg/sankt-peterburg/',
-          'Казань': '/tatarstan/kazan/',
-          'Владивосток': '/primorskiy-kray/vladivostok/'}
+cities = city_dict_open('city_dict.json')
 
 current_city_url = cities['Владивосток']
 
@@ -370,7 +379,7 @@ while(num_operation != '0'):
         data_hsp = data_file.read_data('data' + url_data_file_name + '.csv')
 
         if(data_hsp is None):
-            print('Ошибка! Файл data' + url_data_file_name + '.csv' + ' не найден!')
+            print('Ошибка! Файл data' + url_data_file_name + '.csv' + ' не найден!\n')
         else:
             num_operation_2 = '1'
             while(num_operation_2 != '0'):

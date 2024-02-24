@@ -1,0 +1,17 @@
+{
+	"Москва": "/moskva/moskva/",
+	"Санкт-Петербург": "/sankt-peterburg/sankt-peterburg/",
+	"Владивосток": "/primorskiy-kray/vladivostok/",
+	"Казань": "/tatarstan/kazan/",
+	"Псков": "/pskovskaya-oblast/pskov/",
+	"Владимир": "/vladimirskaya-oblast/vladimir/",
+	"Великий Новгород": "/novgorodskaya-oblast/velikiy-novgorod/",
+	"Смоленск": "/smolenskaya-oblast/smolensk/",
+	"Калуга": "/kaluzhskaya-oblast/kaluga/",
+	"Тула": "/tulskaya-oblast/tula/",
+	"Ярославль": "/yaroslavskaya-oblast/yaroslavl/",
+	"Брянск": "/bryanskaya-oblast/bryansk/",
+	"Рязань": "/ryazanskaya-oblast/ryazan/",
+	"Курск": "/kurskaya-oblast/kursk/",
+	"Белгород": "/belgorodskaya-oblast/belgorod/"
+}
