@@ -13,7 +13,7 @@ from matplotlib.dates import date2num
 import matplotlib.patches as mpatches
 import seaborn as sns
 
-class Data_capture:
+class Data_capture: #Класс скрэпинга
 
     def __init__(self):
         pass
@@ -181,18 +181,18 @@ class Data_capture:
             page_count += 1
             if (page_count == web_pages): break
 
-        with open('data' + u_n + '.json', "a", encoding="cp1251") as file:
-            json.dump(houses_info, file, indent=4, ensure_ascii=False)
+            with open('data' + u_n + '.json', "a", encoding="cp1251") as file:
+                json.dump(houses_info, file, indent=4, ensure_ascii=False)
 
         os.remove('data' + u_n + '.html')
         os.remove('data_page' + u_n + '.html')
         return 0
 
-class Read_stock:
+class Read_stock: #Класс чтения собранных данных
     def __init__(self):
         pass
 
-    def read_data(self, file_name):
+    def read_data(self, file_name): #Функция чтения собранных данных
 
         if (os.path.exists(file_name) == True):
             csv_data = pd.read_csv(file_name, delimiter=';')
@@ -201,11 +201,11 @@ class Read_stock:
         else:
             pass
 
-class Graphs:
+class Graphs: #Класс построения диаграмм из собранных данных
     def __init__(self):
         pass
 
-    def year_plot_hsp(self, data_hsp_column, discription, name_c):
+    def year_bar_chart(self, data_hsp_column, discription, name_c): #Функция столбчатой диаграммы по годам постройки
 
         data_hsp_list = data_hsp_column.tolist()
         data_array_counts = dict(Counter(data_hsp_list))
@@ -262,7 +262,7 @@ class Graphs:
 
         return 0
 
-    def bar_chart_hsp(self, data_hsp_column, discription, name_c):
+    def floors_bar_chart(self, data_hsp_column, discription, name_c):
 
         data_hsp_list = data_hsp_column.tolist()
         data_array_counts = dict(Counter(data_hsp_list))
@@ -274,14 +274,29 @@ class Graphs:
         df = df.sort_values(by = 'val', ascending = True)
 
         fig, ax = plt.subplots(figsize = (8,8))
-        bars = plt.bar(df['key'], df['val'], color = '#4f65ad')
-        ax.bar_label(bars, color = 'black', fontsize = 10, label_type = 'edge', fontweight = 'bold')
+        bars = plt.bar(df['key'], df['val'], color = '#e14845')
+        ax.bar_label(bars, fontsize = 10, label_type = 'edge', fontweight = 'bold')
+
+        ax.spines[['right', 'top', 'left']].set_visible(False)
+        ax.yaxis.set_visible(False)
+
         ax.set_title('Диаграмма распределения домов (г. '+ name_c+')')
-        ax.set_ylabel(discription)
-        plt.xticks(rotation = 45)
+        ax.set_xlabel(discription)
         plt.show()
 
         return 0
+
+    # def quarters_bar_chart(self, data_hsp_column, discription, name_c):
+    #     data_hsp_list = data_hsp_column.tolist()
+    #     data_array_counts = dict(Counter(data_hsp_list))
+    #
+    #     if 'Нет данных' in data_array_counts.keys():
+    #         del data_array_counts['Нет данных']
+    #
+    #     df = pd.DataFrame(data_array_counts.items(), columns=['key', 'val'])
+    #     df = df.sort_values(by='key', ascending=True)
+
+
 
     def pie_diagram_hsp(self, data_hsp_column, discription, name_c):
         data_hsp_list = data_hsp_column.tolist()
@@ -299,10 +314,10 @@ class Graphs:
 
         return 0
 
-class Summon_operations:
+class Summon_operations: #Класс вызова других классов и их методов
     def __init__(self):
         pass
-    def data_capture_op(self, city_url, u_name):
+    def data_capture_op(self, city_url, u_name): #Функция вызова класса и его методов для скрэпинга
         start_time = time.time()
 
         stock = Data_capture()
@@ -311,7 +326,7 @@ class Summon_operations:
         src = stock.get_html(r_src, u_name)
         soup = BeautifulSoup(src, "lxml")
         all_pages_dict = stock.get_all_pages(soup, city_url)
-        stock.get_data(all_pages_dict, 10, u_name)
+        stock.get_data(all_pages_dict, 15, u_name)
 
         end_time = time.time() - start_time
         end_time = round(end_time, 3)
@@ -319,7 +334,7 @@ class Summon_operations:
 
         return 0
 
-    def graphs_op(self, num_op_2, c_name, data_hsp):
+    def graphs_op(self, num_op_2, c_name, data_hsp): #Функция вызова класса и его методов для построения диаграмм
 
         num_operation_dict_2 = {'1': '"Год постройки"',
                                 '2': '"Количество этажей"',
@@ -334,18 +349,18 @@ class Summon_operations:
 
         if (num_op_2 == '1'):
             print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
-            data_graph.year_plot_hsp(data_hsp['Год постройки'], 'Год постройки',
+            data_graph.year_bar_chart(data_hsp['Год постройки'], 'Год постройки',
                                      c_name)  # вызов метода столбчатой диаграммы по году постройки домов
         elif (num_op_2 == '2'):
             print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
-            data_graph.bar_chart_hsp(data_hsp['Количество этажей'], 'Количество этажей',
+            data_graph.floors_bar_chart(data_hsp['Количество этажей'], 'Количество этажей',
                                      c_name)  # вызов метода столбчатой диаграммы по числу этажей
         elif (num_op_2 == '3'):
             print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
             data_graph.pie_diagram_hsp(data_hsp['Тип дома'], 'Тип дома', c_name)  # вызов метода круговой диаграммы
         elif (num_op_2 == '4'):
             print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
-            data_graph.bar_chart_hsp(data_hsp['Жилых помещений'], 'Количество жилых помещений',
+            data_graph.floors_bar_chart(data_hsp['Жилых помещений'], 'Количество жилых помещений',
                                      c_name)  # вызов метода столбчатой диаграммы по числу жилых
         elif (num_op_2 == '5'):
             print(f'Диаграмма по параметру: {num_operation_dict_2[num_op_2]}\n')
@@ -366,7 +381,7 @@ class Summon_operations:
             print('НЕВЕРНО ВВЕДЁН НОМЕР ОПЕРАЦИИ!\n')
         return 0
 
-    def replace_city_op(self, city_dict, curr_c_url):
+    def replace_city_op(self, city_dict, curr_c_url): #Функция замены города
         current_city_name = dict_key_read(city_dict, curr_c_url)
         print(f'Текущий город - {current_city_name}\n')
 
@@ -387,13 +402,13 @@ class Summon_operations:
 
         return curr_c_url
 
-def dict_key_read(cd, ccu):
+def dict_key_read(cd, ccu): #Функция чтения ключей словаря
     for k, v in cd.items():
         if v == ccu:
             dict_key = k
     return dict_key
 
-def city_dict_open(file_name):
+def city_dict_open(file_name): #Функция отрытия json-словаря городов из жилищного фонда
     if (os.path.exists(file_name) == True):
         with open(file_name) as f:
             c_dict = json.load(f)
